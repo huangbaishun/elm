@@ -1,0 +1,37 @@
+body, div, span, header, footer, nav, section, aside, article, ul, dl, dt, dd, li, a, p, h1, h2, h3, h4,h5, h6, i, b, textarea, button, input, select, figure, figcaption {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-style: normal;
+  text-decoration: none;
+  text-align: center;
+  border: none;
+  color: #000;
+  font-weight: normal;
+  font-family: "Microsoft Yahei";
+  box-sizing: border-box;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-font-smoothing: antialiased;
+  touch-action: none;//去除警告：Unable to preventDefault inside passive event listener due to target being treated as passive
+  &:hover{
+      outline: none;
+  }
+}
+html,body{
+  height: 100%;
+  width: 100%;
+  background-color: #F5F5F5;
+}
+.clear:after{
+  content: '';
+  display: block;
+  clear: both;
+}
+.clear{
+  zoom:1;
+}
+.over-hidden {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

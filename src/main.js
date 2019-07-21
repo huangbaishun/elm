@@ -1,9 +1,24 @@
 import Vue from "vue";
 import App from "./App.vue";
-import router from "./router";
+import router from "./router/index";
 import store from "./store";
+import FastClick from "fastclick";
+import MintUI from "mint-ui";
+import "mint-ui/lib/style.css";
+import "@/utils/rem";
+Vue.use(MintUI);
 
 Vue.config.productionTip = false;
+
+if ("addEventListener" in document) {
+  document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+      FastClick.attach(document.body);
+    },
+    false
+  );
+}
 
 new Vue({
   router,

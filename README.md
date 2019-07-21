@@ -1,4 +1,7 @@
-# elm
+# 仿饿了么项目
+```
+技术栈： vue2.x + mint-ui + axios + vuex + vue-router + less
+```
 
 ## Project setup
 ```
@@ -23,7 +26,3 @@ npm run test
 ### Lints and fixes files
 ```
 npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
