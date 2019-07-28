@@ -15,6 +15,7 @@
         placeholder="输入学校、商务楼、地址"
         class="input-sreach"
         autocomplete="off"
+        v-model="searchWord"
         required
       />
       <input
@@ -22,22 +23,27 @@
         name="submit"
         class="city_submit"
         value="提交"
-        v-model="searchWord"
+        @click="search"
       />
     </form>
     <div class="history">
       <p class="history-title" v-if="isHistoryList">搜索历史</p>
       <ul class="history-content">
-        <li class="history-cur">
-          <p class="cur-title">UU通信广场</p>
-          <p class="cur-detaile over-hidden">浙江省杭州市拱墅区上塘路388号</p>
+        <li
+          class="history-cur"
+          v-for="(item, index) in dataList"
+          :key="index"
+          @click="goIndex(item)"
+        >
+          <p class="cur-title">{{ item.name }}</p>
+          <p class="cur-detaile over-hidden">{{ item.address }}</p>
         </li>
       </ul>
       <mt-button
         v-if="isHistoryList"
         size="large"
         type="default"
-        @click.native="search"
+        @click.native="clearAll"
         >清空搜索历史</mt-button
       >
     </div>
@@ -46,12 +52,14 @@
 <script>
 import HeadTop from "@/components/head/HeadTop.vue";
 import { currentcity, searchAddress } from "@/api/service";
+import { setStore, getStore, removeStore } from "@/utils/utils";
 export default {
   data() {
     return {
       cityName: "",
       searchWord: "",
       dataList: [],
+      searchHistory: [],
       isHistoryList: true //判断是否是 搜索历史 模式下
     };
   },
@@ -62,10 +70,14 @@ export default {
     let cityId = this.$route.params.id;
     currentcity(cityId).then(data => {
       this.cityName = data.data.name;
+      this.initHistory();
     });
   },
   mounted() {},
   methods: {
+    initHistory() {
+      this.dataList = this.searchHistory = getStore("searchHistory") || [];
+    },
     back() {
       this.$router.go(-1);
     },
@@ -81,8 +93,31 @@ export default {
         };
         searchAddress(params).then(data => {
           console.log(data);
+          if (data.status === 200) {
+            this.dataList = data.data;
+            this.isHistoryList = false;
+          }
         });
       }
+    },
+    goIndex(curItem) {
+      let oldHistory = getStore("searchHistory");
+      if (oldHistory) {
+        // 判断历史记录是否有搜索的内容
+        let flag = this.searchHistory.some(item => {
+          return item.name === curItem.name;
+        });
+        !flag && this.searchHistory.push(curItem);
+      } else {
+        this.searchHistory.push(curItem);
+      }
+      let hash = curItem.geohash;
+      setStore("searchHistory", this.searchHistory);
+      this.$router.push({ path: "/indexElm", query: { hash } });
+    },
+    clearAll() {
+      removeStore("searchHistory");
+      this.dataList = this.searchHistory = [];
     },
     //过滤非法字符
     filterWord() {}
@@ -112,7 +147,7 @@ export default {
   padding-top: 0.7rem;
   .input-sreach {
     height: 0.6rem;
-    width: 60%;
+    width: 70%;
     border-radius: 6px;
     margin-right: 10px;
     text-align: left;
@@ -129,12 +164,14 @@ export default {
 .history {
   .history-title {
     font-size: 0.28rem;
-    background: #ccc;
+    background: #e4e4e4;
     color: #000;
     text-align: left;
     padding: 0.1rem 0.2rem;
-    border-top: 1px solid #999;
-    border-bottom: 1px solid #999;
+    border-top: 1px solid #ccc;
+  }
+  .history-content {
+    border-top: 1px solid #ccc;
   }
   .history-cur {
     border-bottom: 1px solid #999;
@@ -143,9 +180,10 @@ export default {
     border-bottom: none;
   }
   .cur-title {
-    font-size: 0.4rem;
+    font-size: 0.32rem;
     text-align: left;
     padding: 0.1rem 0.2rem;
+    color: #444;
   }
   .cur-detaile {
     font-size: 0.28rem;

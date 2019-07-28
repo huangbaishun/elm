@@ -10,3 +10,10 @@ export const groupCity = httpService.getHttp("/v1/cities", { type: "group" });
 export const currentcity = id => httpService.getHttp("/v1/cities/" + id);
 //搜索地址
 export const searchAddress = params => httpService.getHttp("/v1/pois", params);
+// 经纬度定位
+export const geoHash = params => httpService.getHttp("/v2/pois/" + params);
+// 食品分类
+export const classify = () => httpService.getHttp("/v2/index_entry");
+// 附近商家
+export const nearshop = params =>
+  httpService.getHttp("/shopping/restaurants", params);

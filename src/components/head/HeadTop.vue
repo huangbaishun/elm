@@ -11,7 +11,7 @@
       <span v-if="userInfo"></span>
       <span class="login-span" v-else>登录|注册</span></router-link
     >
-    <span class="head-title">{{ headTitle }}</span>
+    <span class="head-title over-hidden">{{ headTitle }}</span>
     <slot name="changecity"></slot>
   </header>
 </template>
@@ -63,6 +63,7 @@ export default {
     transform: translate(-50%, -50%);
     color: #fff;
     font-size: 0.4rem;
+    max-width: 3.6rem;
   }
 }
 </style>
