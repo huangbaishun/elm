@@ -7,6 +7,9 @@ import MintUI from "mint-ui";
 import "mint-ui/lib/style.css";
 import "@/utils/rem";
 Vue.use(MintUI);
+import { Rate } from "vant";
+
+Vue.use(Rate);
 
 Vue.config.productionTip = false;
 

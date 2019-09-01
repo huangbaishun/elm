@@ -82,8 +82,8 @@ export default {
 </script>
 <style lang="less">
 .footer .mint-tab-item-label {
-  line-height: 40px;
-  height: 40px;
+  line-height: 0.6rem;
+  height: 0.6rem;
 }
 .footer {
   position: fixed;

@@ -152,8 +152,10 @@ export default {
     margin-right: 10px;
     text-align: left;
     padding: 0 0.1rem;
+    font-size: 0.32rem;
   }
   .city_submit {
+    font-size: 0.32rem;
     height: 0.6rem;
     color: #fff;
     background-color: #3190e8;
