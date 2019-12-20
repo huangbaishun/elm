@@ -27,7 +27,10 @@
           <div class="item-msg">
             <p class="color rate">
               <van-rate v-model="rate" size="0.24rem" />
-              <span style="color: #ffd21e; margin-left: 10px;">{{ item.rating }}</span>&nbsp;&nbsp;月售{{ item.recent_order_num }}单
+              <span style="color: #ffd21e; margin-left: 10px;">{{
+                item.rating
+              }}</span
+              >&nbsp;&nbsp;月售{{ item.recent_order_num }}单
             </p>
             <p class="icon-list">
               <span
