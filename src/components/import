@@ -1,0 +1,131 @@
+<template>
+  <el-button @click="dialogVisible = true" style="min-width:88px;" size="mini">
+    导入
+    <el-dialog
+      :close-on-click-modal="false"
+      :append-to-body="true"
+      title="导入"
+      :close-on-press-escape="false"
+      @close="hadnleClose"
+      :show-close="!importing"
+      :visible.sync="dialogVisible"
+      width="400px"
+    >
+      <!-- <span class="fl upload-label">导入文件:</span> -->
+      <el-upload
+        :limit="1"
+        class="exam-upload"
+        ref="upload"
+        name="excelFile"
+        :auto-upload="false"
+        accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        :action="url"
+        :on-remove="handleRemove"
+        :on-success="handleSuccess"
+        :on-change="handleChange"
+        :on-error="handleError"
+        :file-list="fileList"
+      >
+        <template v-if="fileName">
+          <el-button :disabled="true" icon="el-icon-upload2" size="mini">上传文件</el-button>
+          <span slot="trigger"></span>
+        </template>
+
+        <template v-else slot="trigger">
+          <el-button icon="el-icon-upload2" size="mini">上传文件</el-button>
+        </template>
+        <div slot="tip" class="el-upload__tip">支持扩展名：.xls .xlsx</div>
+      </el-upload>
+      <span slot="footer">
+        <el-button
+          type="primary"
+          @click="handleImport"
+          :disabled="!fileName"
+          :loading="importing"
+         size="mini"
+        >{{importing ? '导入中' : '导入'}}</el-button>
+        <el-button @click="dialogVisible = false" v-if="!importing" size="mini">取 消</el-button>
+      </span>
+    </el-dialog>
+  </el-button>
+</template>
+<script>
+export default {
+  props: {
+    action: String
+  },
+  data: function() {
+    return {
+      loading: true,
+      importing: false,
+      searchValue: {
+        cateId: null,
+        indexId: null,
+        pageNo: 1,
+        pageSize: 10
+      },
+      tableData: [],
+      importResult: [],
+      fileList: [],
+      dialogVisible: false,
+      visibleResultDialg: false,
+      fileName: "",
+      total: 0
+    };
+  },
+  computed: {
+    url: function() {
+      let action = this.action
+      if (action && action[0] !== "/") action = `/${action}`
+      return action
+    }
+  },
+  methods: {
+    hadnleClose: function() {
+      this.importing = false
+      this.fileName = "";
+      this.$refs.upload.clearFiles();
+    },
+    handleChange: function(file, fileList, ...a) {
+      if (file.status === "ready") {
+        this.fileName = file.name;
+      }
+    },
+    handleRemove: function(file, fileList) {
+      if (fileList.length === 0) {
+        this.fileName = "";
+      }
+    },
+    handleSuccess: function(response) {
+      this.dialogVisible = false;
+      if (response.code!=='0'){
+        this.$message({
+          type: "error",
+          message:response.message,
+          duration: 3000
+        })
+      } else {
+        this.$message({
+          type: "success",
+          message: "导入成功!",
+          duration: 3000
+        });
+        this.$emit("success",response);
+      }
+    },
+    handleError: function(error){
+      this.importing = false;
+      this.fileName = "";
+      this.$message({
+          type: "error",
+          message:`错误:${error.status||'未知错误'}`,
+          duration: 3000
+      });
+    },
+    handleImport: function() {
+      this.importing = true;
+      this.$refs.upload.submit();
+    }
+  }
+};
+</script>
