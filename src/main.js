@@ -23,6 +23,13 @@ if ("addEventListener" in document) {
   );
 }
 
+let gobalComponents = require.context('./components', true, /\.g\.vue$/)
+
+gobalComponents.keys().forEach(path => {
+  let component = gobalComponents(path).default
+  Vue.component(component.name || path.replace(/.+[/\\]/, '').replace('.g.vue', ''), component)
+})
+
 new Vue({
   router,
   store,
